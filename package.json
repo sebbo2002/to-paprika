@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "archiver": "^7.0.1",
-        "express": "^4.20.0",
+        "express": "^4.21.2",
         "heic-convert": "^2.1.0",
         "openai": "^6.7.0",
         "pdf-to-png-converter": "^3.10.0",
