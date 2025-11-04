@@ -1,15 +1,22 @@
 {
     "author": "Sebastian Pekarek <mail@sebbo.net>",
     "bin": {
-        "test-cli": "./dist/bin/cli.js"
+        "to-paprika": "./dist/bin/cli.js"
     },
     "bugs": {
-        "url": "https://github.com/sebbo2002/js-template/issues"
+        "url": "https://github.com/sebbo2002/to-paprika/issues"
     },
     "dependencies": {
-        "express": "^4.19.2"
+        "archiver": "^7.0.1",
+        "express": "^4.19.2",
+        "heic-convert": "^2.1.0",
+        "openai": "^6.7.0",
+        "pdf-to-png-converter": "^3.10.0",
+        "prompts": "^2.4.2",
+        "yargs": "^18.0.0",
+        "zod": "^4.1.12"
     },
-    "description": "A template that I use to start new projects and services.",
+    "description": "Simple image/pdf to paprika app converter using LLMs",
     "devDependencies": {
         "@eslint/js": "^9.6.0",
         "@qiwi/semantic-release-gh-pages-plugin": "^5.2.12",
@@ -18,9 +25,13 @@
         "@semantic-release/exec": "^6.0.3",
         "@semantic-release/git": "^10.0.1",
         "@semantic-release/npm": "^12.0.1",
+        "@types/archiver": "^7.0.0",
         "@types/express": "^4.17.21",
+        "@types/heic-convert": "^2.1.0",
         "@types/mocha": "^10.0.7",
         "@types/node": "^20.14.10",
+        "@types/prompts": "^2.4.9",
+        "@types/yargs": "^17.0.34",
         "c8": "^10.1.2",
         "eslint": "^9.6.0",
         "eslint-config-prettier": "^10.1.2",
@@ -50,14 +61,14 @@
     "files": [
         "/dist"
     ],
-    "homepage": "https://github.com/sebbo2002/js-template#readme",
+    "homepage": "https://github.com/sebbo2002/to-paprika#readme",
     "license": "MIT",
     "main": "./dist/lib/index.cjs",
     "module": "./dist/lib/index.js",
-    "name": "@sebbo2002/js-template-test",
+    "name": "@sebbo2002/to-paprika",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/sebbo2002/js-template.git"
+        "url": "git+https://github.com/sebbo2002/to-paprika.git"
     },
     "scripts": {
         "build": "tsup && cp ./dist/lib/index.d.ts ./dist/lib/index.d.cts",
@@ -70,5 +81,5 @@
         "test": "mocha"
     },
     "type": "module",
-    "version": "1.0.0"
+    "version": "1.0.0-develop.0"
 }

@@ -108,7 +108,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64
           pull: true
           push: true
           tags: |
@@ -132,7 +132,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64
           pull: true
           push: true
           tags: |
@@ -156,7 +156,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64
           pull: true
           push: true
           tags: |
@@ -196,7 +196,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ github.repository }}:${{ github.sha }}
@@ -210,17 +210,6 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
           cache-to: type=inline
-      - name: 🏁 Boot-up Check
-        if: github.repository != 'sebbo2002/js-template'
-        run: |
-          docker run --name "app" -d $IMAGE
-          sleep 5
-          docker logs app
-          docker exec app echo "Ok."
-          docker stop app
-          docker rm app
-        env:
-          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
     outputs:
       digest-gh: ${{ steps.docker-build.outputs.digest }}
       digest-dh: ${{ steps.docker-build-dh.outputs.digest }}
