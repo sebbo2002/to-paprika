@@ -114,6 +114,7 @@ export class Converter {
             this.log(title, '🔀');
             const jpeg = Buffer.from(
                 await convert({
+                    // @ts-expect-error Not working with ArrayBuffer, but works with Buffer???
                     buffer: data,
                     format: 'JPEG',
                     quality: 1,
