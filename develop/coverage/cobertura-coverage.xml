@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="530" lines-covered="0" line-rate="0" branches-valid="4" branches-covered="0" branch-rate="0" timestamp="1762320758635" complexity="0" version="0.1">
+<coverage lines-valid="531" lines-covered="0" line-rate="0" branches-valid="4" branches-covered="0" branch-rate="0" timestamp="1762368692426" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/to-paprika/to-paprika</source>
   </sources>
@@ -448,6 +448,7 @@
             <line number="229" hits="0" branch="false"/>
             <line number="230" hits="0" branch="false"/>
             <line number="231" hits="0" branch="false"/>
+            <line number="232" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="index.ts" filename="src/lib/index.ts" line-rate="0" branch-rate="0">
