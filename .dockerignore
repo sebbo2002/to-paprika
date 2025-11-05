@@ -1,0 +1,6 @@
+.github
+.nyc_output
+docs
+node_modules
+src
+test
