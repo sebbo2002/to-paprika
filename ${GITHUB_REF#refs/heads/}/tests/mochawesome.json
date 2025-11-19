@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2025-11-19T19:11:20.666Z",
-    "end": "2025-11-19T19:11:20.675Z",
-    "duration": 9,
+    "start": "2025-11-19T19:20:18.970Z",
+    "end": "2025-11-19T19:20:18.975Z",
+    "duration": 5,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "480cee96-d93b-4c77-a3ea-42b8d5e85d93",
+      "uuid": "0d80e185-f938-4d71-b39e-3c351c4ee82a",
       "title": "",
       "fullFile": "/home/runner/work/to-paprika/to-paprika/test/lib/index.ts",
       "file": "/test/lib/index.ts",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "c925e35d-c530-4935-9dc8-cae00901a3be",
+          "uuid": "c967b526-4065-4696-8b3c-a1a179437064",
           "title": "Example",
           "fullFile": "/home/runner/work/to-paprika/to-paprika/test/lib/index.ts",
           "file": "/test/lib/index.ts",
@@ -47,15 +47,15 @@
               "context": null,
               "code": "import_assert.default.ok(true)",
               "err": {},
-              "uuid": "512788e0-0f5b-4b18-8b3b-0a6842b6c67b",
-              "parentUUID": "c925e35d-c530-4935-9dc8-cae00901a3be",
+              "uuid": "8c547ad8-76bd-4980-8419-6ca80223a16f",
+              "parentUUID": "c967b526-4065-4696-8b3c-a1a179437064",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "512788e0-0f5b-4b18-8b3b-0a6842b6c67b"
+            "8c547ad8-76bd-4980-8419-6ca80223a16f"
           ],
           "failures": [],
           "pending": [],

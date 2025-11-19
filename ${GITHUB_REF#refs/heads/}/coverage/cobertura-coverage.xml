@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="531" lines-covered="0" line-rate="0" branches-valid="4" branches-covered="0" branch-rate="0" timestamp="1763579481565" complexity="0" version="0.1">
+<coverage lines-valid="531" lines-covered="0" line-rate="0" branches-valid="4" branches-covered="0" branch-rate="0" timestamp="1763580019819" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/to-paprika/to-paprika</source>
   </sources>
