@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      workflows: write
     steps:
       - name: 🤖 template-updater
         uses: sebbo2002/action-template-updater@develop
