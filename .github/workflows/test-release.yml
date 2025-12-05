@@ -104,6 +104,7 @@ jobs:
         uses: docker/build-push-action@v6
         continue-on-error: true
         id: docker-build-1
+        timeout-minutes: 30
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -128,6 +129,7 @@ jobs:
         continue-on-error: true
         if: steps.docker-build-1.outcome=='failure'
         id: docker-build-2
+        timeout-minutes: 30
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -152,6 +154,7 @@ jobs:
         if: steps.docker-build-2.outcome=='failure'
         continue-on-error: true
         id: docker-build-3
+        timeout-minutes: 30
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -241,12 +244,6 @@ jobs:
         with:
           node-version: 22.x
           cache: 'npm'
-      - name: 🔧 Setup regclient
-        run: |
-          mkdir -p "$HOME/.local/bin"
-          curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 > "$HOME/.local/bin/regctl"
-          chmod +x "$HOME/.local/bin/regctl"
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: 📦 Ensure npm ≥ 11.5.1
         run: |
           REQUIRED_VERSION="11.5.1"
@@ -260,6 +257,12 @@ jobs:
             echo "Updating npm to latest version..."
             npm install -g npm@latest
           fi
+      - name: 🔧 Setup regclient
+        run: |
+          mkdir -p "$HOME/.local/bin"
+          curl -L https://github.com/regclient/regclient/releases/latest/download/regctl-linux-amd64 > "$HOME/.local/bin/regctl"
+          chmod +x "$HOME/.local/bin/regctl"
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
       - name: 📦 Install dependencies
         run: npm ci
       - name: 📂 Create docs folder
@@ -279,12 +282,12 @@ jobs:
         run: BRANCH=${GITHUB_REF#refs/heads/} npx semantic-release
         env:
           GH_REPO: ${{ github.repository }}
-          GH_OWNER: ${{ github.repository_owner }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_OWNER: ${{ github.repository_owner }}
           NPM_CONFIG_PROVENANCE: true
+          npm_config_access: public
           DOCKER_LOCAL_IMAGE_GH: ghcr.io/${{ github.repository }}:${{ github.sha }}
           DOCKER_LOCAL_IMAGE_DH: ${{ github.repository }}:${{ github.sha }}
-          npm_config_access: public
       - name: 🌎 Deploy GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
