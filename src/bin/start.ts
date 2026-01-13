@@ -16,7 +16,7 @@ class AppServer {
         this.app.use(
             express.raw({
                 limit: '50mb',
-                type: ['image/jpeg', 'image/png', 'image/webp', 'image/heic'],
+                type: ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'],
             }),
         );
 
