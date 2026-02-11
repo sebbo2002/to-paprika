@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/232</span>
+                <span class='fraction'>0/247</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/232</span>
+                <span class='fraction'>0/247</span>
             </div>
         
             
@@ -295,7 +295,37 @@
 <a name='L230'></a><a href='#L230'>230</a>
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -541,6 +571,7 @@
 <span class="cstat-no" title="statement not covered" >import { Recipe, type RecipeType, toRecipes } from './recipe.js';</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >export interface ConverterOptions {</span>
+<span class="cstat-no" title="statement not covered" >    splitPages?: boolean;</span>
 <span class="cstat-no" title="statement not covered" >    stdout?: Writable;</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -653,7 +684,10 @@
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        // pdf handling</span>
-<span class="cstat-no" title="statement not covered" >        if (mimeType === 'application/pdf') {</span>
+<span class="cstat-no" title="statement not covered" >        if (</span>
+<span class="cstat-no" title="statement not covered" >            mimeType === 'application/pdf' &amp;&amp;</span>
+<span class="cstat-no" title="statement not covered" >            this.options.splitPages !== false</span>
+<span class="cstat-no" title="statement not covered" >        ) {</span>
 <span class="cstat-no" title="statement not covered" >            this.log(title, '🔀');</span>
 <span class="cstat-no" title="statement not covered" >            const pages = await pdfToPng(data);</span>
 <span class="cstat-no" title="statement not covered" >            this.log(title, true);</span>
@@ -672,6 +706,24 @@
 <span class="cstat-no" title="statement not covered" >            return result;</span>
 <span class="cstat-no" title="statement not covered" >        }</span>
 <span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >        const content: OpenAI.ChatCompletionContentPart[] = [];</span>
+<span class="cstat-no" title="statement not covered" >        if (mimeType === 'application/pdf') {</span>
+<span class="cstat-no" title="statement not covered" >            content.push({</span>
+<span class="cstat-no" title="statement not covered" >                file: {</span>
+<span class="cstat-no" title="statement not covered" >                    file_data: `data:${mimeType};base64,${data.toString('base64')}`,</span>
+<span class="cstat-no" title="statement not covered" >                    filename: 'recipe.pdf',</span>
+<span class="cstat-no" title="statement not covered" >                },</span>
+<span class="cstat-no" title="statement not covered" >                type: 'file',</span>
+<span class="cstat-no" title="statement not covered" >            });</span>
+<span class="cstat-no" title="statement not covered" >        } else {</span>
+<span class="cstat-no" title="statement not covered" >            content.push({</span>
+<span class="cstat-no" title="statement not covered" >                image_url: {</span>
+<span class="cstat-no" title="statement not covered" >                    url: `data:${mimeType};base64,${data.toString('base64')}`,</span>
+<span class="cstat-no" title="statement not covered" >                },</span>
+<span class="cstat-no" title="statement not covered" >                type: 'image_url',</span>
+<span class="cstat-no" title="statement not covered" >            });</span>
+<span class="cstat-no" title="statement not covered" >        }</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >        this.log(title, '🪄');</span>
 <span class="cstat-no" title="statement not covered" >        const response = await this.client.chat.completions.create({</span>
 <span class="cstat-no" title="statement not covered" >            messages: [</span>
@@ -685,14 +737,7 @@
 <span class="cstat-no" title="statement not covered" >                    role: 'developer',</span>
 <span class="cstat-no" title="statement not covered" >                },</span>
 <span class="cstat-no" title="statement not covered" >                {</span>
-<span class="cstat-no" title="statement not covered" >                    content: [</span>
-<span class="cstat-no" title="statement not covered" >                        {</span>
-<span class="cstat-no" title="statement not covered" >                            image_url: {</span>
-<span class="cstat-no" title="statement not covered" >                                url: `data:${mimeType};base64,${data.toString('base64')}`,</span>
-<span class="cstat-no" title="statement not covered" >                            },</span>
-<span class="cstat-no" title="statement not covered" >                            type: 'image_url',</span>
-<span class="cstat-no" title="statement not covered" >                        },</span>
-<span class="cstat-no" title="statement not covered" >                    ],</span>
+<span class="cstat-no" title="statement not covered" >                    content,</span>
 <span class="cstat-no" title="statement not covered" >                    role: 'user',</span>
 <span class="cstat-no" title="statement not covered" >                },</span>
 <span class="cstat-no" title="statement not covered" >            ],</span>
@@ -766,7 +811,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-23T17:33:13.870Z
+                at 2026-02-11T20:18:27.520Z
             </div>
         <script src="prettify.js"></script>
         <script>

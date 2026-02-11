@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
-<coverage lines-valid="531" lines-covered="0" line-rate="0" branches-valid="4" branches-covered="0" branch-rate="0" timestamp="1769189593864" complexity="0" version="0.1">
+<coverage lines-valid="546" lines-covered="0" line-rate="0" branches-valid="4" branches-covered="0" branch-rate="0" timestamp="1770841107515" complexity="0" version="0.1">
   <sources>
     <source>/home/runner/work/to-paprika/to-paprika</source>
   </sources>
@@ -449,6 +449,21 @@
             <line number="230" hits="0" branch="false"/>
             <line number="231" hits="0" branch="false"/>
             <line number="232" hits="0" branch="false"/>
+            <line number="233" hits="0" branch="false"/>
+            <line number="234" hits="0" branch="false"/>
+            <line number="235" hits="0" branch="false"/>
+            <line number="236" hits="0" branch="false"/>
+            <line number="237" hits="0" branch="false"/>
+            <line number="238" hits="0" branch="false"/>
+            <line number="239" hits="0" branch="false"/>
+            <line number="240" hits="0" branch="false"/>
+            <line number="241" hits="0" branch="false"/>
+            <line number="242" hits="0" branch="false"/>
+            <line number="243" hits="0" branch="false"/>
+            <line number="244" hits="0" branch="false"/>
+            <line number="245" hits="0" branch="false"/>
+            <line number="246" hits="0" branch="false"/>
+            <line number="247" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="index.ts" filename="src/lib/index.ts" line-rate="0" branch-rate="0">
