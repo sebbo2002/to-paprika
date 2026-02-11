@@ -12,6 +12,7 @@ import { Config } from './config.js';
 import { Recipe, type RecipeType, toRecipes } from './recipe.js';
 
 export interface ConverterOptions {
+    splitPages?: boolean;
     stdout?: Writable;
 }
 
@@ -124,7 +125,10 @@ export class Converter {
         }
 
         // pdf handling
-        if (mimeType === 'application/pdf') {
+        if (
+            mimeType === 'application/pdf' &&
+            this.options.splitPages !== false
+        ) {
             this.log(title, '🔀');
             const pages = await pdfToPng(data);
             this.log(title, true);
@@ -143,6 +147,24 @@ export class Converter {
             return result;
         }
 
+        const content: OpenAI.ChatCompletionContentPart[] = [];
+        if (mimeType === 'application/pdf') {
+            content.push({
+                file: {
+                    file_data: `data:${mimeType};base64,${data.toString('base64')}`,
+                    filename: 'recipe.pdf',
+                },
+                type: 'file',
+            });
+        } else {
+            content.push({
+                image_url: {
+                    url: `data:${mimeType};base64,${data.toString('base64')}`,
+                },
+                type: 'image_url',
+            });
+        }
+
         this.log(title, '🪄');
         const response = await this.client.chat.completions.create({
             messages: [
@@ -156,14 +178,7 @@ export class Converter {
                     role: 'developer',
                 },
                 {
-                    content: [
-                        {
-                            image_url: {
-                                url: `data:${mimeType};base64,${data.toString('base64')}`,
-                            },
-                            type: 'image_url',
-                        },
-                    ],
+                    content,
                     role: 'user',
                 },
             ],
