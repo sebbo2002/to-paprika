@@ -1,48 +1,43 @@
-# template
+# 🫑 to-paprika
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
-Here would be a very short description of the project. So in this example it would be a short information that this is
-a template that I use to start new projects and services.
-
-## 🚨 Template Usage Checklist
-
-- [ ] Update project name in `package.json`
-- [ ] Create `main` and `develop` branches
-- [ ] Set `develop` as default branch
-- [ ] Create Docker Repository
-    - [ ] Add Repository Description
-    - [ ] Add secret: `DOCKERHUB_TOKEN`
-- [ ] Create npm Repository with `npm publish --access public`
-    - [ ] Add secret: `NPM_TOKEN`
-- [ ] Go through repo settings
-    - [ ] Add `main` protected branch
-        - Require a pull request before merging
-        - Require `Release` status checks to pass before merging
-        - Lock branch
-
-## 📦 Installation
-
-    git clone https://github.com/sebbo2002/template.git
-    cd ./template
-
-    npm install
+Simple script that feeds a photo or PDF of a recipe into an OpenAPI-compatible API and generates a
+[Paprika Recipes](https://www.paprikaapp.com/)-compatible export. The CLI supports multiple files at
+once. PDFs are automatically split into individual pages, and each page is processed separately
+(corresponding to one recipe per page). HEIC images are also supported. There is also a small web
+server that provides a simple HTTP API that does the same thing.
 
 ## ⚡️ Quick Start
 
-This is where it would normally say how to use the project.
-This could be a code example for a library or instructions on how to use a CLI tool.
+```shell
+# Install the CLI globally
+npm i -g @sebbo2002/to-paprika
 
-## 📑 API-Reference
+# Run Setup Wizard
+to-paprika setup
 
-Is there an API that needs to be documented? Then here would be a nice place for it. If there is external documentation,
-you can link it here ([example](https://github.com/sebbo2002/ical-generator/#-api-reference)).
+# Convert file to Paprika Recipe format
+to-paprika convert ./path/to/your/file.jpg
 
-## 🙋 FAQ
+# Run simple HTTP server
+to-paprika server
+```
 
-### What's `1` + `2`
+There's also a container image available on [Docker Hub](https://hub.docker.com/r/sebbo2002/to-paprika):
 
-It's `3` 🎉
+```shell
+docker run --rm \
+  -v $(pwd):/data \
+  -e TO_PAPRIKA_CONFIG_PATH=/data/to-paprika-config.json \
+  sebbo2002/to-paprika \
+  cli convert /data/path/to/your/file.jpg
+```
+
+## 📱 Apple Shortcut
+
+You can use this [Apple Shortcut](https://www.icloud.com/shortcuts/c1fd034864b34f60a75821811bc1696c)
+to easily use the HTTP API from your iPhone or iPad. Ensure to change the URL and add your Auth Token.
 
 ## 🙆🏼‍♂️ Copyright and license
 
