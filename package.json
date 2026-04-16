@@ -1,7 +1,7 @@
 {
     "author": "Sebastian Pekarek <mail@sebbo.net>",
     "bin": {
-        "to-paprika": "./dist/bin/cli.js"
+        "to-paprika": "./dist/bin/cli.mjs"
     },
     "bugs": {
         "url": "https://github.com/sebbo2002/to-paprika/issues"
