@@ -135,6 +135,7 @@ export class Converter {
 
             const result: RecipeType[] = [];
             for (const page of pages) {
+                if (!page.content) continue;
                 result.push(
                     ...(await this.convertBuffer(
                         `${title} (p. ${page.pageNumber})`,
