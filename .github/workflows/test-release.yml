@@ -15,7 +15,7 @@ jobs:
     if: github.repository != 'sebbo2002/js-template' && (contains(toJson(github.event.commits.*.message), '[skip ci]') == false || github.ref == 'refs/heads/main')
     strategy:
       matrix:
-        node: [20.x, 22.x, 23.x, current]
+        node: [22.x, 24.x, 25.x, current]
     steps:
       - name: ☁️ Checkout Project
         uses: actions/checkout@v6
@@ -77,7 +77,7 @@ jobs:
         uses: docker/setup-qemu-action@v4
       - name: 🔧 Set up Buildx
         id: buildx
-        uses: docker/setup-buildx-action@master
+        uses: docker/setup-buildx-action@v4
       - name: 🔐 Login to GitHub Container Registry
         uses: docker/login-action@v4
         with:
@@ -111,7 +111,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64/v8
           pull: true
           push: true
           tags: |
@@ -136,7 +136,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64/v8
           pull: true
           push: true
           tags: |
@@ -161,7 +161,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64/v8
           pull: true
           push: true
           tags: |
@@ -201,7 +201,7 @@ jobs:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64/v8
           push: true
           tags: |
             ${{ github.repository }}:${{ github.sha }}
