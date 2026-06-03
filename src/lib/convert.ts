@@ -176,7 +176,7 @@ export class Converter {
                             type: 'text',
                         },
                     ],
-                    role: 'developer',
+                    role: 'system',
                 },
                 {
                     content,
