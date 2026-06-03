@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2026-05-27T17:28:24.681Z",
-    "end": "2026-05-27T17:28:24.686Z",
-    "duration": 5,
+    "start": "2026-06-03T18:03:25.979Z",
+    "end": "2026-06-03T18:03:25.986Z",
+    "duration": 7,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "efb22d06-1285-49f7-ab56-ca25d7c41b5f",
+      "uuid": "fc13a45d-5b28-4716-9a7d-b64e6d0a0a83",
       "title": "",
       "fullFile": "/home/runner/work/to-paprika/to-paprika/test/lib/index.ts",
       "file": "/test/lib/index.ts",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "81603e2c-76b6-4789-9931-bf17723e0f09",
+          "uuid": "2783fc0f-b861-477c-848a-dfbe72544b6f",
           "title": "Example",
           "fullFile": "/home/runner/work/to-paprika/to-paprika/test/lib/index.ts",
           "file": "/test/lib/index.ts",
@@ -38,7 +38,7 @@
               "title": "should work",
               "fullTitle": "Example should work",
               "timedOut": false,
-              "duration": 0,
+              "duration": 1,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -47,20 +47,20 @@
               "context": null,
               "code": "import_assert.default.ok(true)",
               "err": {},
-              "uuid": "b0e183a9-77c5-4580-8f1b-6a8f39db8b77",
-              "parentUUID": "81603e2c-76b6-4789-9931-bf17723e0f09",
+              "uuid": "70a42051-3723-4491-b986-1749df247ceb",
+              "parentUUID": "2783fc0f-b861-477c-848a-dfbe72544b6f",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "b0e183a9-77c5-4580-8f1b-6a8f39db8b77"
+            "70a42051-3723-4491-b986-1749df247ceb"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 0,
+          "duration": 1,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
