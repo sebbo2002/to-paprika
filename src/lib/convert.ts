@@ -150,13 +150,19 @@ export class Converter {
 
         const content: OpenAI.ChatCompletionContentPart[] = [];
         if (mimeType === 'application/pdf') {
-            content.push({
-                file: {
-                    file_data: `data:${mimeType};base64,${data.toString('base64')}`,
-                    filename: 'recipe.pdf',
-                },
-                type: 'file',
-            });
+            this.log(title, '🔀');
+            const pages = await pdfToPng(data);
+            this.log(title, true);
+
+            for (const page of pages) {
+                if (!page.content) continue;
+                content.push({
+                    image_url: {
+                        url: `data:image/png;base64,${page.content.toString('base64')}`,
+                    },
+                    type: 'image_url',
+                });
+            }
         } else {
             content.push({
                 image_url: {
