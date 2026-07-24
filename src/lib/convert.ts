@@ -59,7 +59,7 @@ export class Converter {
     ): Promise<Buffer> {
         const config = await Config.use();
 
-        let recipes: RecipeType[] = [];
+        let recipes: RecipeType[];
         if (
             typeof arg1 === 'string' &&
             (typeof arg2 === 'object' || arg2 === undefined)
@@ -115,7 +115,6 @@ export class Converter {
             this.log(title, '🔀');
             const jpeg = Buffer.from(
                 await convert({
-                    // @ts-expect-error Not working with ArrayBuffer, but works with Buffer???
                     buffer: data,
                     format: 'JPEG',
                     quality: 1,
@@ -206,6 +205,7 @@ export class Converter {
         } catch (error) {
             throw new Error(
                 `Failed to parse LLM response for file: ${title} (mime = ${mimeType}, length = ${data.length}): ${(error as Error).message}`,
+                { cause: error },
             );
         }
 

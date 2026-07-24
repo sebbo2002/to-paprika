@@ -67,6 +67,7 @@ export class Config {
         } catch (err) {
             throw new Error(
                 `Failed to read config file at ${this.path}: ${(err as Error).message}`,
+                { cause: err },
             );
         }
 
@@ -76,6 +77,7 @@ export class Config {
         } catch (err) {
             throw new Error(
                 `Failed to parse config file at ${this.path}: ${(err as Error).message}`,
+                { cause: err },
             );
         }
 
@@ -175,6 +177,7 @@ export class Config {
             console.log('');
             throw new Error(
                 `Failed to write config file at ${this.path}: ${(error as Error).message}`,
+                { cause: error },
             );
         }
 
