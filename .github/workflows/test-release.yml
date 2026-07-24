@@ -230,9 +230,10 @@ jobs:
       - name: 🏁 Boot-up Check
         if: github.repository != 'sebbo2002/js-template'
         run: |
-          # Create dummy config for boot-up check
           echo '{"llm":{"apiKey":"test","baseUrl":"http://localhost","model":"test"},"output":"/tmp","server":{"authToken":"test-token"}}' > /tmp/.to-paprika.config.json
-          docker run --name "app" -d -v /tmp/.to-paprika.config.json:/app/.to-paprika.config.json:ro -p 8080:8080 $IMAGE
+          docker run --name "app" -d -p 8080:8080 \
+            -v /tmp/.to-paprika.config.json:/home/node/.to-paprika.config.json:ro \
+            $IMAGE
           sleep 5
           docker logs app
           curl -f http://localhost:8080/ping || exit 1
