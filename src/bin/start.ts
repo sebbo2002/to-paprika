@@ -16,7 +16,13 @@ class AppServer {
         this.app.use(
             express.raw({
                 limit: '50mb',
-                type: ['image/jpeg', 'image/png', 'image/webp', 'image/heic'],
+                type: [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp',
+                    'image/heic',
+                    'application/pdf',
+                ],
             }),
         );
 
@@ -49,7 +55,12 @@ class AppServer {
             }
 
             const contentType = req.headers['content-type'] || '';
-            Converter.convert(Buffer.from(req.body), contentType)
+            const splitPages = !!req.headers['x-split-pages'];
+
+            Converter.convert(Buffer.from(req.body), contentType, {
+                splitPages,
+                stdout: process.stdout,
+            })
                 .then((response: Buffer) => {
                     res.setHeader('Content-Type', 'application/octet-stream');
                     res.setHeader('Content-Length', response.byteLength);

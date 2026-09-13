@@ -2,6 +2,7 @@
 'use strict';
 
 import { writeFile } from 'node:fs/promises';
+import revealFile from 'reveal-file';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -35,6 +36,7 @@ yargs(hideBin(process.argv))
 
             const outputFile = await Converter.generateOutputFilePath(files);
             await writeFile(outputFile, recipes);
+            await revealFile(outputFile);
         },
     )
     .command(

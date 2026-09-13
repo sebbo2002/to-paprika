@@ -15,12 +15,12 @@ jobs:
     if: github.repository != 'sebbo2002/js-template' && (contains(toJson(github.event.commits.*.message), '[skip ci]') == false || github.ref == 'refs/heads/main')
     strategy:
       matrix:
-        node: [20.x, 22.x, 23.x, current]
+        node: [22.x, 24.x, 25.x, current]
     steps:
       - name: ☁️ Checkout Project
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 🔧 Setup node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
           cache: 'npm'
@@ -35,11 +35,11 @@ jobs:
     if: github.repository != 'sebbo2002/js-template' && (contains(toJson(github.event.commits.*.message), '[skip ci]') == false || github.ref == 'refs/heads/main')
     steps:
       - name: ☁️ Checkout Project
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 🔧 Setup node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: 23.x
+          node-version: 24.x
           cache: 'npm'
       - name: 📦 Install dependencies
         run: npm ci
@@ -54,10 +54,11 @@ jobs:
     if: contains(toJson(github.event.commits.*.message), '[skip ci]') == false || github.ref == 'refs/heads/main'
     steps:
       - name: ☁️ Checkout Project
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 🔧 Setup node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
+          node-version: 24.x
           cache: 'npm'
       - name: 📦 Install dependencies
         run: npm ci
@@ -69,22 +70,28 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUSH_TO_DOCKERHUB: ${{ (github.repository != 'sebbo2002/js-template') && (secrets.DOCKERHUB_TOKEN != null) }}
+      # Dependabot PRs get a read-only GITHUB_TOKEN that cannot write packages,
+      # so we skip the push (but still build + smoke-test the image locally).
+      PUSH_IMAGE: ${{ github.actor != 'dependabot[bot]' }}
+      BUILD_OUTPUTS: ${{ github.actor == 'dependabot[bot]' && 'type=docker' || '' }}
+      BUILD_PLATFORMS: ${{ github.actor != 'dependabot[bot]' && 'linux/amd64,linux/arm64/v8' || 'linux/amd64' }}
     steps:
       - name: ☁️ Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 🔧 Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
       - name: 🔧 Set up Buildx
         id: buildx
-        uses: docker/setup-buildx-action@master
+        uses: docker/setup-buildx-action@v4
       - name: 🔐 Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
+        if: ${{ env.PUSH_IMAGE == 'true' }}
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 🔐 Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         if: ${{ env.PUSH_TO_DOCKERHUB == 'true' }}
         with:
           username: ${{ github.repository_owner }}
@@ -93,24 +100,27 @@ jobs:
         id: buildVars
         run: echo "date=$(date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
       - name: 🔧 Setup node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
+          node-version: 24.x
           cache: 'npm'
       - name: 📦 Install dependencies
         run: npm ci
       - name: ⚙️ Build project
         run: npm run build
       - name: 🪄 Build and push
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         continue-on-error: true
         id: docker-build-1
+        timeout-minutes: 30
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.BUILD_PLATFORMS }}
           pull: true
-          push: true
+          push: ${{ env.PUSH_IMAGE == 'true' }}
+          outputs: ${{ env.BUILD_OUTPUTS }}
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
@@ -124,17 +134,19 @@ jobs:
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
             ghcr.io/${{ github.repository }}:next
       - name: 🪄 Build and push (second try)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         continue-on-error: true
         if: steps.docker-build-1.outcome=='failure'
         id: docker-build-2
+        timeout-minutes: 30
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.BUILD_PLATFORMS }}
           pull: true
-          push: true
+          push: ${{ env.PUSH_IMAGE == 'true' }}
+          outputs: ${{ env.BUILD_OUTPUTS }}
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
@@ -148,17 +160,19 @@ jobs:
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
             ghcr.io/${{ github.repository }}:next
       - name: 🪄 Build and push (third try)
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         if: steps.docker-build-2.outcome=='failure'
         continue-on-error: true
         id: docker-build-3
+        timeout-minutes: 30
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ env.BUILD_PLATFORMS }}
           pull: true
-          push: true
+          push: ${{ env.PUSH_IMAGE == 'true' }}
+          outputs: ${{ env.BUILD_OUTPUTS }}
           tags: |
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
@@ -176,7 +190,9 @@ jobs:
         if: always()
         id: docker-build
         run: |
-          if ${{ steps.docker-build-1.outcome=='success' }}; then
+          if [ "${{ env.PUSH_IMAGE }}" != "true" ]; then
+              echo "⏭️  Skipping push (Dependabot PR)"
+          elif ${{ steps.docker-build-1.outcome=='success' }}; then
              echo "🎉 Whoop whoop, that worked (first try)"
              echo "digest=${{ steps.docker-build-1.outputs.digest }}" >> $GITHUB_OUTPUT
           elif ${{ steps.docker-build-2.outcome=='success' }}; then
@@ -186,18 +202,19 @@ jobs:
              echo "🎉 Whoop whoop, that worked (third try)"
              echo "digest=${{ steps.docker-build-3.outputs.digest }}" >> $GITHUB_OUTPUT
           else
-             exit 1
+              exit 1
           fi
       - name: 🔄 Push container to DockerHub
         id: docker-build-dh
         if: ${{ env.PUSH_TO_DOCKERHUB == 'true' }}
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           github-token: ${{ secrets.GITHUB_TOKEN }}
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/amd64,linux/arm64
-          push: true
+          platforms: ${{ env.BUILD_PLATFORMS }}
+          push: ${{ env.PUSH_IMAGE == 'true' }}
+          outputs: ${{ env.BUILD_OUTPUTS }}
           tags: |
             ${{ github.repository }}:${{ github.sha }}
           labels: |
@@ -210,6 +227,21 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ github.sha }}
             ghcr.io/${{ github.repository }}:cache-${{ hashFiles('package*.json') }}
           cache-to: type=inline
+      - name: 🏁 Boot-up Check
+        if: github.repository != 'sebbo2002/js-template'
+        run: |
+          echo '{"llm":{"apiKey":"test","baseUrl":"http://localhost","model":"test"},"output":"/tmp","server":{"authToken":"test-token"}}' > /tmp/.to-paprika.config.json
+          docker run --name "app" -d -p 8080:8080 \
+            -v /tmp/.to-paprika.config.json:/home/node/.to-paprika.config.json:ro \
+            $IMAGE
+          sleep 5
+          docker logs app
+          curl -f http://localhost:8080/ping || exit 1
+          docker exec app echo "Ok."
+          docker stop app
+          docker rm app
+        env:
+          IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
     outputs:
       digest-gh: ${{ steps.docker-build.outputs.digest }}
       digest-dh: ${{ steps.docker-build-dh.outputs.digest }}
@@ -222,10 +254,11 @@ jobs:
       PUSH_TO_DOCKERHUB: ${{ (github.repository != 'sebbo2002/js-template') && (secrets.DOCKERHUB_TOKEN != null) }}
     permissions:
       contents: write
+      id-token: write
       issues: write
       packages: write
+      pages: write
       pull-requests: write
-      id-token: write
     needs:
       - coverage
       - tests
@@ -234,12 +267,25 @@ jobs:
     if: ${{ github.repository != 'sebbo2002/js-template' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') }}
     steps:
       - name: ☁️ Checkout Project
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: 🔧 Setup node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
-          node-version: 22.x
+          node-version: 24.x
           cache: 'npm'
+      - name: 📦 Ensure npm ≥ 11.5.1
+        run: |
+          REQUIRED_VERSION="11.5.1"
+          CURRENT_VERSION=$(npm -v)
+          echo "Current npm version: $CURRENT_VERSION"
+
+          SMALLEST=$(printf '%s\n' "$CURRENT_VERSION" "$REQUIRED_VERSION" | sort -V | head -n1)
+          if [ "$CURRENT_VERSION" = "$REQUIRED_VERSION" ] || [ "$SMALLEST" = "$REQUIRED_VERSION" ]; then
+            echo "npm version ($CURRENT_VERSION) meets the requirement ($REQUIRED_VERSION)."
+          else
+            echo "Updating npm to latest version..."
+            npm install -g npm@latest
+          fi
       - name: 🔧 Setup regclient
         run: |
           mkdir -p "$HOME/.local/bin"
@@ -251,13 +297,13 @@ jobs:
       - name: 📂 Create docs folder
         run: mkdir ./docs
       - name: 🔐 Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: 🔐 Login to DockerHub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v4
         with:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -265,18 +311,24 @@ jobs:
         run: BRANCH=${GITHUB_REF#refs/heads/} npx semantic-release
         env:
           GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_OWNER: ${{ github.repository_owner }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
+          npm_config_access: public
           DOCKER_LOCAL_IMAGE_GH: ghcr.io/${{ github.repository }}:${{ github.sha }}
           DOCKER_LOCAL_IMAGE_DH: ${{ github.repository }}:${{ github.sha }}
-          npm_config_access: public
+      - name: 🌎 Deploy GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          destination_dir: ./${GITHUB_REF#refs/heads/}
       - name: 🔃 Merge main back into develop
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: everlytic/branch-merge@1.1.5
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_ref: 'main'
           target_branch: 'develop'
           commit_message_template: 'Merge branch {source_ref} into {target_branch} [skip ci]'

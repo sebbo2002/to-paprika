@@ -4,9 +4,9 @@
 
 Simple script that feeds a photo or PDF of a recipe into an OpenAPI-compatible API and generates a
 [Paprika Recipes](https://www.paprikaapp.com/)-compatible export. The CLI supports multiple files at
-once. PDFs are automatically split into individual pages, and each page is processed separately
-(corresponding to one recipe per page). HEIC images are also supported. There is also a small web
-server that provides a simple HTTP API that does the same thing.
+once. PDFs are automatically converted to images. By default, each page is processed as a separate recipe
+(`splitPages`). Alternatively, all pages can be processed together as a single recipe. HEIC images are also
+supported. There is also a small web server that provides a simple HTTP API that does the same thing.
 
 ## ⚡️ Quick Start
 
