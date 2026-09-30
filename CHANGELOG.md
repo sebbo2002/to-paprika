@@ -1,3 +1,29 @@
+# [2.0.0](https://github.com/sebbo2002/to-paprika/compare/v1.0.0...v2.0.0) (2026-09-30)
+
+### Bug Fixes
+
+- correct config mount path in boot-up check to /home/node ([aaaa34a](https://github.com/sebbo2002/to-paprika/commit/aaaa34a2ff19829f9cceedb590fd7feafca4c36c))
+- create dummy config for CI boot-up check ([bf86da3](https://github.com/sebbo2002/to-paprika/commit/bf86da3ec8932216b83d6dcbf522863ee924a1c2))
+- Fix role issue ([ec46377](https://github.com/sebbo2002/to-paprika/commit/ec4637727e33d836496aaab322a1d4b10e6dec74))
+- update archiver v8 API usage and fix TypeDoc errors ([f7d912d](https://github.com/sebbo2002/to-paprika/commit/f7d912d3df2513ca9179039aeb34a21e069462d7))
+
+### Features
+
+- Add `x-split-pages` header ([c303983](https://github.com/sebbo2002/to-paprika/commit/c303983c7616eced417f5215f92d41deaa3e96ae))
+- Add pdf to supported server file types ([6542646](https://github.com/sebbo2002/to-paprika/commit/654264656637ec37a204035c665355350848baa4))
+- Convert multipage pdfs into pngs ([d40fc9e](https://github.com/sebbo2002/to-paprika/commit/d40fc9e799554bcdc566cd7a65f0f847deff8911))
+- Drop support for node.js v20 and v23 ([d949a08](https://github.com/sebbo2002/to-paprika/commit/d949a088c82ede8768c62556cfc0da9ce2255b1b))
+- Reveal created file after generation (cli only) ([6c20173](https://github.com/sebbo2002/to-paprika/commit/6c2017372b52ad80594dc64b7d79644b89ce39bd))
+- Update Docker Base Image ([2ff47ce](https://github.com/sebbo2002/to-paprika/commit/2ff47ce0a7c9ec5e27a8af618d73c907ccf413a1))
+
+### BREAKING CHANGES
+
+- Drop node.js v20 / v23 Support
+
+This node.js version is no longer supported. For more information see https://nodejs.dev/en/about/releases/
+
+- Containers for linux/arm/v7 and linux/arm/v6 are no longer built automatically, as they are no longer available for node:lts-alpine. Please build these containers yourself if you need to. New supported platforms: linux/amd64 and linux/arm64/v8
+
 # 1.0.0 (2025-11-05)
 
 ### Bug Fixes
