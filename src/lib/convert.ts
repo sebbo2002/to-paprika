@@ -12,6 +12,7 @@ import { Config } from './config.js';
 import { Recipe, type RecipeType, toRecipes } from './recipe.js';
 
 export interface ConverterOptions {
+    splitPages?: boolean;
     stdout?: Writable;
 }
 
@@ -58,7 +59,7 @@ export class Converter {
     ): Promise<Buffer> {
         const config = await Config.use();
 
-        let recipes: RecipeType[] = [];
+        let recipes: RecipeType[];
         if (
             typeof arg1 === 'string' &&
             (typeof arg2 === 'object' || arg2 === undefined)
@@ -114,7 +115,6 @@ export class Converter {
             this.log(title, '🔀');
             const jpeg = Buffer.from(
                 await convert({
-                    // @ts-expect-error Not working with ArrayBuffer, but works with Buffer???
                     buffer: data,
                     format: 'JPEG',
                     quality: 1,
@@ -124,13 +124,17 @@ export class Converter {
         }
 
         // pdf handling
-        if (mimeType === 'application/pdf') {
+        if (
+            mimeType === 'application/pdf' &&
+            this.options.splitPages !== false
+        ) {
             this.log(title, '🔀');
             const pages = await pdfToPng(data);
             this.log(title, true);
 
             const result: RecipeType[] = [];
             for (const page of pages) {
+                if (!page.content) continue;
                 result.push(
                     ...(await this.convertBuffer(
                         `${title} (p. ${page.pageNumber})`,
@@ -143,6 +147,30 @@ export class Converter {
             return result;
         }
 
+        const content: OpenAI.ChatCompletionContentPart[] = [];
+        if (mimeType === 'application/pdf') {
+            this.log(title, '🔀');
+            const pages = await pdfToPng(data);
+            this.log(title, true);
+
+            for (const page of pages) {
+                if (!page.content) continue;
+                content.push({
+                    image_url: {
+                        url: `data:image/png;base64,${page.content.toString('base64')}`,
+                    },
+                    type: 'image_url',
+                });
+            }
+        } else {
+            content.push({
+                image_url: {
+                    url: `data:${mimeType};base64,${data.toString('base64')}`,
+                },
+                type: 'image_url',
+            });
+        }
+
         this.log(title, '🪄');
         const response = await this.client.chat.completions.create({
             messages: [
@@ -153,17 +181,10 @@ export class Converter {
                             type: 'text',
                         },
                     ],
-                    role: 'developer',
+                    role: 'system',
                 },
                 {
-                    content: [
-                        {
-                            image_url: {
-                                url: `data:${mimeType};base64,${data.toString('base64')}`,
-                            },
-                            type: 'image_url',
-                        },
-                    ],
+                    content,
                     role: 'user',
                 },
             ],
@@ -184,6 +205,7 @@ export class Converter {
         } catch (error) {
             throw new Error(
                 `Failed to parse LLM response for file: ${title} (mime = ${mimeType}, length = ${data.length}): ${(error as Error).message}`,
+                { cause: error },
             );
         }
 

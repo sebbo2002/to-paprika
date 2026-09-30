@@ -1,4 +1,4 @@
-import archiver from 'archiver';
+import { ZipArchive } from 'archiver';
 import { PassThrough } from 'node:stream';
 import * as z from 'zod';
 
@@ -63,7 +63,7 @@ export type RecipeType = z.infer<typeof Recipe>;
  * Convert an array of recipes to a .paprikarecipes buffer
  */
 export async function toRecipes(recipes: RecipeType[]): Promise<Buffer> {
-    const zip = archiver('zip', { zlib: { level: 9 } });
+    const zip = new ZipArchive({ zlib: { level: 9 } });
     const zipStream = new PassThrough();
     const chunks: Buffer[] = [];
 
