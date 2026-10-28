@@ -191,7 +191,7 @@ jobs:
         id: docker-build
         run: |
           if [ "${{ env.PUSH_IMAGE }}" != "true" ]; then
-              echo "⏭️  Skipping push (Dependabot PR)"
+            echo "⏭️  Skipping push (Dependabot PR)"
           elif ${{ steps.docker-build-1.outcome=='success' }}; then
              echo "🎉 Whoop whoop, that worked (first try)"
              echo "digest=${{ steps.docker-build-1.outputs.digest }}" >> $GITHUB_OUTPUT
