@@ -5,9 +5,9 @@
     "passes": 1,
     "pending": 0,
     "failures": 0,
-    "start": "2026-09-30T13:45:52.517Z",
-    "end": "2026-09-30T13:45:52.524Z",
-    "duration": 7,
+    "start": "2026-10-29T06:57:22.818Z",
+    "end": "2026-10-29T06:57:22.827Z",
+    "duration": 9,
     "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
@@ -18,7 +18,7 @@
   },
   "results": [
     {
-      "uuid": "9b6df975-bf4e-46bc-8e91-305253521803",
+      "uuid": "1f9015d9-2152-41d1-bc60-7b7b383e5e7e",
       "title": "",
       "fullFile": "/home/runner/work/to-paprika/to-paprika/test/lib/index.ts",
       "file": "/test/lib/index.ts",
@@ -27,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "07810d3f-a85b-4e27-8eba-34acb4a13577",
+          "uuid": "214e4f9f-3ff6-4a50-ad23-d79401f3097e",
           "title": "Example",
           "fullFile": "/home/runner/work/to-paprika/to-paprika/test/lib/index.ts",
           "file": "/test/lib/index.ts",
@@ -38,7 +38,7 @@
               "title": "should work",
               "fullTitle": "Example should work",
               "timedOut": false,
-              "duration": 1,
+              "duration": 0,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -47,20 +47,20 @@
               "context": null,
               "code": "import_assert.default.ok(true)",
               "err": {},
-              "uuid": "b5e59dab-6705-48f9-a897-054c0d6eb4e8",
-              "parentUUID": "07810d3f-a85b-4e27-8eba-34acb4a13577",
+              "uuid": "d626bafb-0e1b-4d03-8479-b2ec7db9b47c",
+              "parentUUID": "214e4f9f-3ff6-4a50-ad23-d79401f3097e",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "b5e59dab-6705-48f9-a897-054c0d6eb4e8"
+            "d626bafb-0e1b-4d03-8479-b2ec7db9b47c"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 1,
+          "duration": 0,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
@@ -78,7 +78,7 @@
   ],
   "meta": {
     "mocha": {
-      "version": "12.0.2"
+      "version": "12.0.3"
     },
     "mochawesome": {
       "options": {
