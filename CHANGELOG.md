@@ -1,3 +1,5 @@
+## [2.0.1](https://github.com/sebbo2002/to-paprika/compare/v2.0.0...v2.0.1) (2026-10-29)
+
 # [2.0.0](https://github.com/sebbo2002/to-paprika/compare/v1.0.0...v2.0.0) (2026-09-30)
 
 ### Bug Fixes
